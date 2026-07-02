@@ -8,6 +8,7 @@ const swaggerSpec = require('./config/swagger');
 const authRoutes = require('./routes/authRoutes');
 const catwayRoutes = require('./routes/catwayRoutes');
 const userRoutes = require('./routes/userRoutes');
+const homeRoutes = require('./routes/pages/homeRoutes');
 const { requireAuth } = require('./middlewares/auth');
 const { notFoundHandler, errorHandler } = require('./middlewares/errorHandler');
 
@@ -27,10 +28,7 @@ app.use(async (req, res, next) => {
   next();
 });
 
-app.get('/', (req, res) => {
-  res.send('OK');
-});
-
+app.use('/', homeRoutes);
 app.use('/', authRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/catways', requireAuth, catwayRoutes);

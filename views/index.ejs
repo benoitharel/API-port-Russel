@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body>
+  <main class="home">
+    <section class="presentation">
+      <h1>Capitainerie du port de Russell</h1>
+      <p>
+        Application de gestion des catways et des réservations du port de
+        Russell : suivi des emplacements, réservations des plaisanciers et
+        administration des comptes utilisateurs.
+      </p>
+    </section>
+
+    <section class="login">
+      <h2>Connexion</h2>
+      <% if (loginError) { %>
+        <p class="error">Email ou mot de passe invalide.</p>
+      <% } %>
+      <form action="/login" method="POST">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" name="password" required>
+
+        <button type="submit">Se connecter</button>
+      </form>
+    </section>
+
+    <p><a href="/api-docs">Documentation de l'API (Swagger)</a></p>
+  </main>
+
+  <%- include('partials/footer') %>
+</body>
+</html>
