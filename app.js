@@ -7,6 +7,7 @@ const authRoutes = require('./routes/authRoutes');
 const catwayRoutes = require('./routes/catwayRoutes');
 const userRoutes = require('./routes/userRoutes');
 const { requireAuth } = require('./middlewares/auth');
+const { notFoundHandler, errorHandler } = require('./middlewares/errorHandler');
 
 const app = express();
 
@@ -31,5 +32,8 @@ app.get('/', (req, res) => {
 app.use('/', authRoutes);
 app.use('/catways', requireAuth, catwayRoutes);
 app.use('/users', requireAuth, userRoutes);
+
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 module.exports = app;

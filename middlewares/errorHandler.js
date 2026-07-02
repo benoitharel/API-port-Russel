@@ -1,0 +1,40 @@
+/**
+ * 404 : route non trouvée. Négocie JSON (API) vs HTML (navigateur).
+ */
+function notFoundHandler(req, res) {
+  const type = req.accepts(['html', 'json']);
+  if (type === 'html') {
+    return res.status(404).render('error', { status: 404, message: 'Page introuvable' });
+  }
+  return res.status(404).json({ message: 'Route introuvable' });
+}
+
+/**
+ * Handler d'erreurs centralisé. Mappe les erreurs Mongoose/Mongo connues
+ * vers un statut HTTP explicite ; ne jamais renvoyer la stack au client.
+ */
+function errorHandler(err, req, res, next) {
+  console.error(err);
+
+  let status = 500;
+  let message = 'Erreur interne du serveur';
+
+  if (err.name === 'ValidationError') {
+    status = 400;
+    message = 'Données invalides';
+  } else if (err.code === 11000) {
+    status = 409;
+    message = 'Ressource déjà existante';
+  } else if (err.name === 'CastError') {
+    status = 400;
+    message = 'Identifiant invalide';
+  }
+
+  const type = req.accepts(['html', 'json']);
+  if (type === 'html') {
+    return res.status(status).render('error', { status, message });
+  }
+  return res.status(status).json({ message });
+}
+
+module.exports = { notFoundHandler, errorHandler };
