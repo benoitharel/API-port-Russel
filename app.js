@@ -4,6 +4,8 @@ const morgan = require('morgan');
 const path = require('path');
 const connectDB = require('./config/db');
 const authRoutes = require('./routes/authRoutes');
+const catwayRoutes = require('./routes/catwayRoutes');
+const { requireAuth } = require('./middlewares/auth');
 
 const app = express();
 
@@ -26,5 +28,6 @@ app.get('/', (req, res) => {
 });
 
 app.use('/', authRoutes);
+app.use('/catways', requireAuth, catwayRoutes);
 
 module.exports = app;
