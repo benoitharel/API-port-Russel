@@ -21,7 +21,7 @@ function errorHandler(err, req, res, next) {
 
   if (err.name === 'ValidationError') {
     status = 400;
-    message = 'Données invalides';
+    message = Object.values(err.errors).map((e) => e.message).join(', ');
   } else if (err.code === 11000) {
     status = 409;
     message = 'Ressource déjà existante';
