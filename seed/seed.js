@@ -16,13 +16,24 @@ async function seed() {
 
   await mongoose.connect(process.env.MONGODB_URI, { bufferCommands: false });
 
+  const catwaysData = require('./catways.json');
+  if (!Array.isArray(catwaysData) || catwaysData.length === 0) {
+    throw new Error('catways.json est vide ou invalide');
+  }
   await Catway.deleteMany({});
-  const catways = await Catway.insertMany(require('./catways.json'));
+  const catways = await Catway.insertMany(catwaysData);
 
+  const reservationsData = require('./reservations.json');
+  if (!Array.isArray(reservationsData) || reservationsData.length === 0) {
+    throw new Error('reservations.json est vide ou invalide');
+  }
   await Reservation.deleteMany({});
-  const reservations = await Reservation.insertMany(require('./reservations.json'));
+  const reservations = await Reservation.insertMany(reservationsData);
 
   let demoUser = await User.findOne({ email: DEMO_USER.email });
+  // username/password volontairement réinitialisés à chaque run pour garantir
+  // des identifiants de démo toujours connus (Demo1234!), y compris si un test
+  // manuel les a changés en base.
   if (!demoUser) {
     demoUser = new User(DEMO_USER);
   } else {
