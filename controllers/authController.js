@@ -9,6 +9,14 @@ const User = require('../models/User');
 async function login(req, res, next) {
   const { email, password } = req.body;
 
+  if (!email || !password) {
+    const type = req.accepts(['html', 'json']);
+    if (type === 'html') {
+      return res.redirect('/?error=1');
+    }
+    return res.status(401).json({ message: 'Email ou mot de passe invalide' });
+  }
+
   const user = await User.findOne({ email }).select('+password');
   const valid = user && (await user.comparePassword(password));
 
