@@ -6,6 +6,7 @@ const {
   updateCatwayState,
   deleteCatway,
 } = require('../controllers/catwayController');
+const reservationRoutes = require('./reservationRoutes');
 
 const router = express.Router();
 
@@ -14,5 +15,6 @@ router.get('/:id', getCatwayById);
 router.post('/', createCatway);
 router.put('/:id', updateCatwayState);
 router.delete('/:id', deleteCatway);
+router.use('/:id/reservations', reservationRoutes);
 
 module.exports = router;
