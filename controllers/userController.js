@@ -40,8 +40,8 @@ async function createUser(req, res, next) {
     return res.status(409).json({ message: 'email déjà utilisé' });
   }
 
-  await User.create({ username, email, password });
-  const user = await User.findOne({ email });
+  const user = await User.create({ username, email, password });
+  user.password = undefined;
 
   return res.status(201).json(user);
 }
