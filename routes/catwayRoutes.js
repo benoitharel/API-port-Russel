@@ -99,6 +99,7 @@ router.post('/', createCatway);
  * /catways/{id}:
  *   put:
  *     summary: Met à jour l'état d'un catway (seul catwayState est pris en compte)
+ *     description: Seul le champ catwayState est modifié ; catwayNumber et catwayType présents dans le body sont silencieusement ignorés.
  *     tags: [Catways]
  *     security: [{ bearerAuth: [] }, { cookieAuth: [] }]
  *     parameters:
@@ -137,6 +138,7 @@ router.put('/:id', updateCatwayState);
  * /catways/{id}:
  *   delete:
  *     summary: Supprime un catway
+ *     description: Refuse la suppression (409) si le catway a des réservations existantes ; pas de suppression en cascade.
  *     tags: [Catways]
  *     security: [{ bearerAuth: [] }, { cookieAuth: [] }]
  *     parameters:

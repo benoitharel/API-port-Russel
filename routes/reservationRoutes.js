@@ -79,6 +79,7 @@ router.get('/:idReservation', getReservationById);
  * /catways/{id}/reservations:
  *   post:
  *     summary: Crée une réservation sur un catway
+ *     description: Refuse la création (409) si les dates chevauchent une réservation existante sur ce même catway.
  *     tags: [Reservations]
  *     security: [{ bearerAuth: [] }, { cookieAuth: [] }]
  *     parameters:
@@ -122,6 +123,7 @@ router.post('/', createReservation);
  * /catways/{id}/reservations/{idReservation}:
  *   put:
  *     summary: Met à jour une réservation
+ *     description: Refuse la mise à jour (409) si les nouvelles dates chevauchent une autre réservation existante sur ce même catway.
  *     tags: [Reservations]
  *     security: [{ bearerAuth: [] }, { cookieAuth: [] }]
  *     parameters:
