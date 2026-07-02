@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const path = require('path');
 const connectDB = require('./config/db');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 
@@ -23,5 +24,7 @@ app.use(async (req, res, next) => {
 app.get('/', (req, res) => {
   res.send('OK');
 });
+
+app.use('/', authRoutes);
 
 module.exports = app;
