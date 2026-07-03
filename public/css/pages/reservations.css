@@ -1,0 +1,40 @@
+.reservations-list,
+.reservation-new,
+.reservation-edit,
+.reservation-show {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.reservation-new form,
+.reservation-edit form,
+.reservation-show {
+  background: #fff;
+  border: 1px solid #d9dfe5;
+  border-radius: 6px;
+  padding: 1.5rem;
+}
+
+.reservations-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.reservations-list th,
+.reservations-list td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #d9dfe5;
+}
+
+.reservations-list th {
+  background: #f5f7fa;
+  font-weight: 600;
+}
+
+.reservations-list .actions-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}

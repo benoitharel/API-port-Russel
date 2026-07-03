@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <%- include('../partials/head', { title: 'Réservations' }) %>
+</head>
+<body>
+  <%- include('../partials/nav') %>
+
+  <main class="reservations-list">
+    <h1>Réservations</h1>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+      <p class="error"><%= error %></p>
+    <% } %>
+
+    <p><a href="/dashboard/reservations/new">Ajouter une réservation</a></p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Catway</th>
+          <th>Client</th>
+          <th>Bateau</th>
+          <th>Début</th>
+          <th>Fin</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% reservations.forEach(r => { %>
+          <tr>
+            <td><%= r.catwayNumber %></td>
+            <td><a href="/dashboard/reservations/<%= r._id %>"><%= r.clientName %></a></td>
+            <td><%= r.boatName %></td>
+            <td><%= r.startDate.toISOString().slice(0, 10) %></td>
+            <td><%= r.endDate.toISOString().slice(0, 10) %></td>
+            <td class="actions-cell">
+              <a href="/dashboard/reservations/<%= r._id %>/edit?from=list" class="btn btn-secondary btn-sm">Modifier</a>
+              <form action="/dashboard/reservations/<%= r._id %>/delete" method="POST"
+                    onsubmit="return confirm('Supprimer cette réservation ?');" class="inline-form">
+                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <%- include('../partials/head', { title: 'Ajouter une réservation' }) %>
+</head>
+<body>
+  <%- include('../partials/nav') %>
+
+  <main class="reservation-new">
+    <h1>Ajouter une réservation</h1>
+
+    <% if (errors.length > 0) { %>
+      <ul class="error">
+        <% errors.forEach(e => { %>
+          <li><%= e %></li>
+        <% }) %>
+      </ul>
+    <% } %>
+
+    <form action="/dashboard/reservations" method="POST">
+      <label for="catwayNumber">Catway</label>
+      <select id="catwayNumber" name="catwayNumber" required>
+        <option value="">-- Choisir un catway --</option>
+        <% catways.forEach(c => { %>
+          <option value="<%= c.catwayNumber %>" <%= String(values.catwayNumber) === String(c.catwayNumber) ? 'selected' : '' %>>
+            <%= c.catwayNumber %> (<%= c.catwayType %>)
+          </option>
+        <% }) %>
+      </select>
+
+      <label for="clientName">Client</label>
+      <input type="text" id="clientName" name="clientName" value="<%= values.clientName || '' %>" required>
+
+      <label for="boatName">Bateau</label>
+      <input type="text" id="boatName" name="boatName" value="<%= values.boatName || '' %>" required>
+
+      <label for="startDate">Début</label>
+      <input type="date" id="startDate" name="startDate" value="<%= values.startDate || '' %>" required>
+
+      <label for="endDate">Fin</label>
+      <input type="date" id="endDate" name="endDate" value="<%= values.endDate || '' %>" required>
+
+      <button type="submit">Créer</button>
+    </form>
+
+    <p><a href="/dashboard/reservations">Retour à la liste</a></p>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>
