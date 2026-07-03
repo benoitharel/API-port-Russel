@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
-const Catway = require('../models/Catway');
 const Reservation = require('../models/Reservation');
+const { parseCatwayNumber, findCatwayByNumber } = require('./helpers/catwayLookup');
+
+// Duplique volontairement controllers/pages/reservationPageController.js (API JSON vs dashboard HTML) — ne pas factoriser en service partagé.
 
 /**
  * Recherche une réservation existante qui chevauche la période donnée sur un catway.
@@ -47,12 +49,12 @@ function parseReservationBody(body) {
  * GET /catways/:id/reservations
  */
 async function getAllReservations(req, res, next) {
-  const catwayNumber = Number(req.params.id);
-  if (Number.isNaN(catwayNumber)) {
+  const catwayNumber = parseCatwayNumber(req.params.id);
+  if (catwayNumber === null) {
     return res.status(400).json({ message: 'id invalide' });
   }
 
-  const catway = await Catway.findOne({ catwayNumber });
+  const catway = await findCatwayByNumber(catwayNumber);
   if (!catway) {
     return res.status(404).json({ message: 'Catway introuvable' });
   }
@@ -65,12 +67,12 @@ async function getAllReservations(req, res, next) {
  * GET /catways/:id/reservations/:idReservation
  */
 async function getReservationById(req, res, next) {
-  const catwayNumber = Number(req.params.id);
-  if (Number.isNaN(catwayNumber)) {
+  const catwayNumber = parseCatwayNumber(req.params.id);
+  if (catwayNumber === null) {
     return res.status(400).json({ message: 'id invalide' });
   }
 
-  const catway = await Catway.findOne({ catwayNumber });
+  const catway = await findCatwayByNumber(catwayNumber);
   if (!catway) {
     return res.status(404).json({ message: 'Catway introuvable' });
   }
@@ -92,12 +94,12 @@ async function getReservationById(req, res, next) {
  * POST /catways/:id/reservations
  */
 async function createReservation(req, res, next) {
-  const catwayNumber = Number(req.params.id);
-  if (Number.isNaN(catwayNumber)) {
+  const catwayNumber = parseCatwayNumber(req.params.id);
+  if (catwayNumber === null) {
     return res.status(400).json({ message: 'id invalide' });
   }
 
-  const catway = await Catway.findOne({ catwayNumber });
+  const catway = await findCatwayByNumber(catwayNumber);
   if (!catway) {
     return res.status(404).json({ message: 'Catway introuvable' });
   }
@@ -127,12 +129,12 @@ async function createReservation(req, res, next) {
  * PUT /catways/:id/reservations/:idReservation
  */
 async function updateReservation(req, res, next) {
-  const catwayNumber = Number(req.params.id);
-  if (Number.isNaN(catwayNumber)) {
+  const catwayNumber = parseCatwayNumber(req.params.id);
+  if (catwayNumber === null) {
     return res.status(400).json({ message: 'id invalide' });
   }
 
-  const catway = await Catway.findOne({ catwayNumber });
+  const catway = await findCatwayByNumber(catwayNumber);
   if (!catway) {
     return res.status(404).json({ message: 'Catway introuvable' });
   }

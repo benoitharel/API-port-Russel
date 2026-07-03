@@ -1,5 +1,8 @@
 const Catway = require('../models/Catway');
 const Reservation = require('../models/Reservation');
+const { parseCatwayNumber, findCatwayByNumber } = require('./helpers/catwayLookup');
+
+// Duplique volontairement controllers/pages/catwayPageController.js (API JSON vs dashboard HTML) — ne pas factoriser en service partagé.
 
 /**
  * GET /catways
@@ -13,12 +16,12 @@ async function getAllCatways(req, res, next) {
  * GET /catways/:id
  */
 async function getCatwayById(req, res, next) {
-  const catwayNumber = Number(req.params.id);
-  if (Number.isNaN(catwayNumber)) {
+  const catwayNumber = parseCatwayNumber(req.params.id);
+  if (catwayNumber === null) {
     return res.status(400).json({ message: 'id invalide' });
   }
 
-  const catway = await Catway.findOne({ catwayNumber });
+  const catway = await findCatwayByNumber(catwayNumber);
   if (!catway) {
     return res.status(404).json({ message: 'Catway introuvable' });
   }
@@ -57,12 +60,12 @@ async function createCatway(req, res, next) {
  * Seul catwayState est pris en compte ; catwayNumber/catwayType sont ignorés.
  */
 async function updateCatwayState(req, res, next) {
-  const catwayNumber = Number(req.params.id);
-  if (Number.isNaN(catwayNumber)) {
+  const catwayNumber = parseCatwayNumber(req.params.id);
+  if (catwayNumber === null) {
     return res.status(400).json({ message: 'id invalide' });
   }
 
-  const catway = await Catway.findOne({ catwayNumber });
+  const catway = await findCatwayByNumber(catwayNumber);
   if (!catway) {
     return res.status(404).json({ message: 'Catway introuvable' });
   }
@@ -82,12 +85,12 @@ async function updateCatwayState(req, res, next) {
  * DELETE /catways/:id
  */
 async function deleteCatway(req, res, next) {
-  const catwayNumber = Number(req.params.id);
-  if (Number.isNaN(catwayNumber)) {
+  const catwayNumber = parseCatwayNumber(req.params.id);
+  if (catwayNumber === null) {
     return res.status(400).json({ message: 'id invalide' });
   }
 
-  const catway = await Catway.findOne({ catwayNumber });
+  const catway = await findCatwayByNumber(catwayNumber);
   if (!catway) {
     return res.status(404).json({ message: 'Catway introuvable' });
   }

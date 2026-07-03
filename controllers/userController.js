@@ -1,5 +1,14 @@
 const User = require('../models/User');
 
+// Duplique volontairement controllers/pages/userPageController.js (API JSON vs dashboard HTML) — ne pas factoriser en service partagé.
+
+/**
+ * Recherche un utilisateur par email.
+ */
+async function findUserByEmail(email) {
+  return User.findOne({ email });
+}
+
 /**
  * GET /users
  */
@@ -14,7 +23,7 @@ async function getAllUsers(req, res, next) {
 async function getUserByEmail(req, res, next) {
   const email = decodeURIComponent(req.params.email);
 
-  const user = await User.findOne({ email });
+  const user = await findUserByEmail(email);
   if (!user) {
     return res.status(404).json({ message: 'Utilisateur introuvable' });
   }
@@ -35,7 +44,7 @@ async function createUser(req, res, next) {
     return res.status(400).json({ message: 'password doit contenir au moins 6 caractères' });
   }
 
-  const existing = await User.findOne({ email });
+  const existing = await findUserByEmail(email);
   if (existing) {
     return res.status(409).json({ message: 'email déjà utilisé' });
   }
@@ -53,7 +62,7 @@ async function createUser(req, res, next) {
 async function updateUser(req, res, next) {
   const email = decodeURIComponent(req.params.email);
 
-  const user = await User.findOne({ email });
+  const user = await findUserByEmail(email);
   if (!user) {
     return res.status(404).json({ message: 'Utilisateur introuvable' });
   }
@@ -61,7 +70,7 @@ async function updateUser(req, res, next) {
   const { username, email: newEmail, password } = req.body;
 
   if (newEmail !== undefined && newEmail !== user.email) {
-    const existing = await User.findOne({ email: newEmail });
+    const existing = await findUserByEmail(newEmail);
     if (existing) {
       return res.status(409).json({ message: 'email déjà utilisé' });
     }
@@ -91,7 +100,7 @@ async function updateUser(req, res, next) {
 async function deleteUser(req, res, next) {
   const email = decodeURIComponent(req.params.email);
 
-  const user = await User.findOne({ email });
+  const user = await findUserByEmail(email);
   if (!user) {
     return res.status(404).json({ message: 'Utilisateur introuvable' });
   }
