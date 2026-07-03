@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <%- include('partials/head', { title: 'Tableau de bord' }) %>
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <main class="dashboard">
+    <section class="user-info">
+      <h1>Bonjour, <%= user.username %></h1>
+      <p><%= user.email %></p>
+      <p>Nous sommes le <%= today.toLocaleDateString('fr-FR') %></p>
+    </section>
+
+    <section class="reservations">
+      <h2>Réservations en cours</h2>
+      <% if (currentReservations.length === 0) { %>
+        <p>Aucune réservation en cours aujourd'hui.</p>
+      <% } else { %>
+        <table>
+          <thead>
+            <tr>
+              <th>Catway</th>
+              <th>Client</th>
+              <th>Bateau</th>
+              <th>Début</th>
+              <th>Fin</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% currentReservations.forEach(r => { %>
+              <tr>
+                <td><%= r.catwayNumber %></td>
+                <td><%= r.clientName %></td>
+                <td><%= r.boatName %></td>
+                <td><%= r.startDate.toLocaleDateString('fr-FR') %></td>
+                <td><%= r.endDate.toLocaleDateString('fr-FR') %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </section>
+  </main>
+
+  <%- include('partials/footer') %>
+</body>
+</html>
