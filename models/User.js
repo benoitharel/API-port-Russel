@@ -22,6 +22,8 @@ const userSchema = new mongoose.Schema(
 
 /**
  * Hache le mot de passe avant sauvegarde s'il a été modifié.
+ * Hook Mongoose sans paramètre explicite : `this` référence le document en cours de sauvegarde.
+ * @returns {Promise<void>}
  */
 userSchema.pre('save', async function () {
   if (!this.isModified('password')) return;

@@ -3,19 +3,44 @@ const Reservation = require('../../models/Reservation');
 
 // Duplique volontairement ../catwayController.js (dashboard HTML vs API JSON) — ne pas factoriser en service partagé.
 
+/**
+ * Normalise le paramètre `from` de navigation (list/show) vers une valeur connue.
+ * @param {string} value - Valeur brute reçue en query/body.
+ * @returns {'list'|'show'} La valeur normalisée.
+ */
 function normalizeFrom(value) {
   return value === 'list' ? 'list' : 'show';
 }
 
+/**
+ * Calcule l'URL vers laquelle rediriger le bouton Annuler d'un formulaire d'édition.
+ * @param {number} catwayNumber - Catway concerné.
+ * @param {'list'|'show'} from - Page d'origine de la navigation.
+ * @returns {string} L'URL de retour.
+ */
 function resolveCancelUrl(catwayNumber, from) {
   return from === 'list' ? '/dashboard/catways' : `/dashboard/catways/${catwayNumber}`;
 }
 
+/**
+ * GET /dashboard/catways
+ * Affiche la liste des catways.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
+ */
 async function list(req, res) {
   const catways = await Catway.find().sort({ catwayNumber: 1 });
   res.render('catways/list', { catways });
 }
 
+/**
+ * GET /dashboard/catways/:id
+ * Affiche le détail d'un catway.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
+ */
 async function show(req, res) {
   const catwayNumber = Number(req.params.id);
   const catway = await Catway.findOne({ catwayNumber });
@@ -25,10 +50,24 @@ async function show(req, res) {
   res.render('catways/show', { catway });
 }
 
+/**
+ * GET /dashboard/catways/new
+ * Affiche le formulaire de création d'un catway.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {void}
+ */
 function newForm(req, res) {
   res.render('catways/new', { errors: [], values: {} });
 }
 
+/**
+ * POST /dashboard/catways
+ * Traite la soumission du formulaire de création d'un catway.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
+ */
 async function create(req, res) {
   const { catwayNumber, catwayType, catwayState } = req.body;
   const errors = [];
@@ -59,6 +98,13 @@ async function create(req, res) {
   res.redirect('/dashboard/catways');
 }
 
+/**
+ * GET /dashboard/catways/:id/edit
+ * Affiche le formulaire d'édition d'un catway.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
+ */
 async function editForm(req, res) {
   const catwayNumber = Number(req.params.id);
   const catway = await Catway.findOne({ catwayNumber });
@@ -69,6 +115,13 @@ async function editForm(req, res) {
   res.render('catways/edit', { catway, errors: [], from, cancelUrl: resolveCancelUrl(catwayNumber, from) });
 }
 
+/**
+ * POST /dashboard/catways/:id
+ * Traite la soumission du formulaire d'édition (seul catwayState est modifiable).
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
+ */
 async function update(req, res) {
   const catwayNumber = Number(req.params.id);
   const catway = await Catway.findOne({ catwayNumber });
@@ -93,6 +146,13 @@ async function update(req, res) {
   res.redirect(`/dashboard/catways/${catwayNumber}`);
 }
 
+/**
+ * POST /dashboard/catways/:id/delete
+ * Supprime un catway. Bloqué (409) si des réservations existent — pas de cascade.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
+ */
 async function deleteCatway(req, res) {
   const catwayNumber = Number(req.params.id);
   const catway = await Catway.findOne({ catwayNumber });

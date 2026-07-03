@@ -4,11 +4,25 @@ const User = require('../../models/User');
 
 const EMAIL_RE = /^\S+@\S+\.\S+$/;
 
+/**
+ * GET /dashboard/users
+ * Affiche la liste des utilisateurs.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
+ */
 async function list(req, res) {
   const users = await User.find().sort({ username: 1 });
   res.render('users/list', { users });
 }
 
+/**
+ * GET /dashboard/users/:email
+ * Affiche le détail d'un utilisateur.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
+ */
 async function show(req, res) {
   const email = decodeURIComponent(req.params.email);
   const user = await User.findOne({ email });
@@ -18,10 +32,24 @@ async function show(req, res) {
   res.render('users/show', { user });
 }
 
+/**
+ * GET /dashboard/users/new
+ * Affiche le formulaire de création d'un utilisateur.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {void}
+ */
 function newForm(req, res) {
   res.render('users/new', { errors: [], values: {} });
 }
 
+/**
+ * POST /dashboard/users
+ * Traite la soumission du formulaire de création d'un utilisateur.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
+ */
 async function create(req, res) {
   const { username, email, password } = req.body;
   const errors = [];
@@ -51,6 +79,13 @@ async function create(req, res) {
   res.redirect('/dashboard/users');
 }
 
+/**
+ * GET /dashboard/users/:email/edit
+ * Affiche le formulaire d'édition d'un utilisateur.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
+ */
 async function editForm(req, res) {
   const email = decodeURIComponent(req.params.email);
   const user = await User.findOne({ email });
@@ -60,6 +95,13 @@ async function editForm(req, res) {
   res.render('users/edit', { user, originalEmail: user.email, errors: [] });
 }
 
+/**
+ * POST /dashboard/users/:email
+ * Traite la soumission du formulaire d'édition d'un utilisateur.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
+ */
 async function update(req, res) {
   const email = decodeURIComponent(req.params.email);
   const user = await User.findOne({ email });
@@ -105,6 +147,13 @@ async function update(req, res) {
   res.redirect(`/dashboard/users/${encodeURIComponent(user.email)}`);
 }
 
+/**
+ * POST /dashboard/users/:email/delete
+ * Supprime un utilisateur.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
+ */
 async function deleteUser(req, res) {
   const email = decodeURIComponent(req.params.email);
   const user = await User.findOne({ email });

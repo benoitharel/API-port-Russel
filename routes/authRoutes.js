@@ -59,7 +59,9 @@ router.post('/login', login);
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/Error'
+ *               type: object
+ *               properties:
+ *                 message: { type: string }
  */
 router.get('/logout', logout);
 

@@ -6,6 +6,11 @@ const { parseCatwayNumber, findCatwayByNumber } = require('./helpers/catwayLooku
 
 /**
  * Recherche une réservation existante qui chevauche la période donnée sur un catway.
+ * @param {number} catwayNumber - Catway concerné.
+ * @param {Date} startDate - Début de la période à vérifier.
+ * @param {Date} endDate - Fin de la période à vérifier.
+ * @param {string} [excludeReservationId] - Réservation à exclure de la recherche (cas d'une mise à jour).
+ * @returns {Promise<import('mongoose').Document|null>} La réservation en conflit, ou null si aucune.
  */
 async function checkOverlap(catwayNumber, startDate, endDate, excludeReservationId) {
   return Reservation.findOne({
@@ -18,7 +23,8 @@ async function checkOverlap(catwayNumber, startDate, endDate, excludeReservation
 
 /**
  * Valide clientName, boatName, startDate, endDate depuis le body.
- * Retourne { error: string } ou { clientName, boatName, startDate, endDate }.
+ * @param {object} body - Corps de la requête.
+ * @returns {{error: string}|{clientName: string, boatName: string, startDate: Date, endDate: Date}} L'erreur de validation, ou les champs parsés.
  */
 function parseReservationBody(body) {
   const { clientName, boatName, startDate, endDate } = body;
@@ -47,6 +53,10 @@ function parseReservationBody(body) {
 
 /**
  * GET /catways/:id/reservations
+ * Liste les réservations d'un catway.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
  */
 async function getAllReservations(req, res, next) {
   const catwayNumber = parseCatwayNumber(req.params.id);
@@ -65,6 +75,9 @@ async function getAllReservations(req, res, next) {
 
 /**
  * GET /catways/:id/reservations/:idReservation
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
  */
 async function getReservationById(req, res, next) {
   const catwayNumber = parseCatwayNumber(req.params.id);
@@ -92,6 +105,10 @@ async function getReservationById(req, res, next) {
 
 /**
  * POST /catways/:id/reservations
+ * Crée une réservation. Rejette (409) les chevauchements de dates sur le même catway.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
  */
 async function createReservation(req, res, next) {
   const catwayNumber = parseCatwayNumber(req.params.id);
@@ -127,6 +144,10 @@ async function createReservation(req, res, next) {
 
 /**
  * PUT /catways/:id/reservations/:idReservation
+ * Rejette (409) les chevauchements de dates avec une autre réservation du même catway.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
  */
 async function updateReservation(req, res, next) {
   const catwayNumber = parseCatwayNumber(req.params.id);
@@ -170,6 +191,9 @@ async function updateReservation(req, res, next) {
 
 /**
  * DELETE /catways/:id/reservations/:idReservation
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
  */
 async function deleteReservation(req, res, next) {
   const catwayNumber = Number(req.params.id);
@@ -196,5 +220,4 @@ module.exports = {
   createReservation,
   updateReservation,
   deleteReservation,
-  checkOverlap,
 };
