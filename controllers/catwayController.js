@@ -6,6 +6,10 @@ const { parseCatwayNumber, findCatwayByNumber } = require('./helpers/catwayLooku
 
 /**
  * GET /catways
+ * Liste tous les catways.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
  */
 async function getAllCatways(req, res, next) {
   const catways = await Catway.find();
@@ -14,6 +18,10 @@ async function getAllCatways(req, res, next) {
 
 /**
  * GET /catways/:id
+ * Récupère un catway par son catwayNumber (`req.params.id`).
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
  */
 async function getCatwayById(req, res, next) {
   const catwayNumber = parseCatwayNumber(req.params.id);
@@ -31,6 +39,10 @@ async function getCatwayById(req, res, next) {
 
 /**
  * POST /catways
+ * Crée un catway. Body `{catwayNumber, catwayType, catwayState}`.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
  */
 async function createCatway(req, res, next) {
   const { catwayNumber, catwayType, catwayState } = req.body;
@@ -58,6 +70,9 @@ async function createCatway(req, res, next) {
 /**
  * PUT /catways/:id
  * Seul catwayState est pris en compte ; catwayNumber/catwayType sont ignorés.
+ * @param {import('express').Request} req - Requête Express entrante, body `{catwayState}`.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
  */
 async function updateCatwayState(req, res, next) {
   const catwayNumber = parseCatwayNumber(req.params.id);
@@ -83,6 +98,10 @@ async function updateCatwayState(req, res, next) {
 
 /**
  * DELETE /catways/:id
+ * Bloqué (409) si le catway a des réservations existantes — pas de cascade.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
  */
 async function deleteCatway(req, res, next) {
   const catwayNumber = parseCatwayNumber(req.params.id);

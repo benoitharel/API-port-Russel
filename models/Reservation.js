@@ -15,6 +15,11 @@ const reservationSchema = new mongoose.Schema(
       type: Date,
       required: true,
       validate: {
+        /**
+         * Vérifie que endDate est bien postérieure à startDate sur ce document.
+         * @param {Date} v - Valeur candidate de endDate.
+         * @returns {boolean} true si endDate est valide.
+         */
         validator: function (v) {
           return this.startDate < v;
         },

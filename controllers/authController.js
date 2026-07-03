@@ -3,6 +3,10 @@ const User = require('../models/User');
 
 /**
  * Répond selon le type de contenu négocié : callback html() ou json().
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @param {{html: Function, json: Function}} handlers - Callback à invoquer selon le type négocié.
+ * @returns {void}
  */
 function respondByType(req, res, { html, json }) {
   const type = req.accepts(['html', 'json']);
@@ -16,6 +20,9 @@ function respondByType(req, res, { html, json }) {
  * POST /login
  * Vérifie les credentials, pose un cookie `token` httpOnly et répond
  * JSON `{token, user}` (client JSON) ou redirige `/dashboard` (form HTML).
+ * @param {import('express').Request} req - Requête Express entrante, body `{email, password}`.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
  */
 async function login(req, res, next) {
   const { email, password } = req.body;
@@ -57,6 +64,9 @@ async function login(req, res, next) {
 /**
  * GET /logout
  * Efface le cookie `token` puis redirige `/` (html) ou répond 200 JSON.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {void}
  */
 function logout(req, res) {
   res.clearCookie('token');

@@ -188,6 +188,8 @@ router.put('/:idReservation', updateReservation);
  *     responses:
  *       204:
  *         description: Réservation supprimée
+ *       400:
+ *         description: catwayNumber (id) invalide
  *       401:
  *         description: Authentification requise
  *       404:

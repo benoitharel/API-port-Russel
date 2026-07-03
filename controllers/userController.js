@@ -4,6 +4,8 @@ const User = require('../models/User');
 
 /**
  * Recherche un utilisateur par email.
+ * @param {string} email - Email recherché.
+ * @returns {Promise<import('mongoose').Document|null>} Le document utilisateur, ou null si introuvable.
  */
 async function findUserByEmail(email) {
   return User.findOne({ email });
@@ -11,6 +13,10 @@ async function findUserByEmail(email) {
 
 /**
  * GET /users
+ * Liste tous les utilisateurs.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
  */
 async function getAllUsers(req, res, next) {
   const users = await User.find();
@@ -19,6 +25,10 @@ async function getAllUsers(req, res, next) {
 
 /**
  * GET /users/:email
+ * Récupère un utilisateur par son email (`req.params.email`, URL-encodé).
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
  */
 async function getUserByEmail(req, res, next) {
   const email = decodeURIComponent(req.params.email);
@@ -33,6 +43,10 @@ async function getUserByEmail(req, res, next) {
 
 /**
  * POST /users
+ * Crée un utilisateur. Body `{username, email, password}`.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
  */
 async function createUser(req, res, next) {
   const { username, email, password } = req.body;
@@ -58,6 +72,9 @@ async function createUser(req, res, next) {
 /**
  * PUT /users/:email
  * Body partiel { username?, email?, password? }.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
  */
 async function updateUser(req, res, next) {
   const email = decodeURIComponent(req.params.email);
@@ -96,6 +113,9 @@ async function updateUser(req, res, next) {
 
 /**
  * DELETE /users/:email
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
  */
 async function deleteUser(req, res, next) {
   const email = decodeURIComponent(req.params.email);

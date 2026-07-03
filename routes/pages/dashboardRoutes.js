@@ -3,6 +3,7 @@ const { getDashboard } = require('../../controllers/pages/dashboardPageControlle
 
 const router = express.Router();
 
+/** GET /dashboard — tableau de bord (réservations en cours). */
 router.get('/', getDashboard);
 
 module.exports = router;

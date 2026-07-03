@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken');
 /**
  * Lit le token JWT depuis la requête : cookie `token` en priorité,
  * sinon header `Authorization: Bearer <token>`.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @returns {string|null} Le token trouvé, ou null si absent.
  */
 function getTokenFromRequest(req) {
   if (req.cookies && req.cookies.token) {
@@ -18,6 +20,10 @@ function getTokenFromRequest(req) {
 /**
  * Exige un JWT valide. Attache `req.user = { id, username, email }`.
  * Sinon : redirect `/` (HTML) ou 401 JSON (API), selon `req.accepts`.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @param {import('express').NextFunction} next - Callback pour passer la main au handler suivant.
+ * @returns {void}
  */
 function requireAuth(req, res, next) {
   const token = getTokenFromRequest(req);
@@ -35,6 +41,12 @@ function requireAuth(req, res, next) {
   }
 }
 
+/**
+ * Répond à une requête non authentifiée : redirect `/` (HTML) ou 401 JSON (API).
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {void}
+ */
 function unauthorized(req, res) {
   const type = req.accepts(['html', 'json']);
   if (type === 'html') {

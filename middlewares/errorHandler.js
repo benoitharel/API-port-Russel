@@ -1,5 +1,8 @@
 /**
  * 404 : route non trouvée. Négocie JSON (API) vs HTML (navigateur).
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {void}
  */
 function notFoundHandler(req, res) {
   const type = req.accepts(['html', 'json']);
@@ -12,6 +15,11 @@ function notFoundHandler(req, res) {
 /**
  * Handler d'erreurs centralisé. Mappe les erreurs Mongoose/Mongo connues
  * vers un statut HTTP explicite ; ne jamais renvoyer la stack au client.
+ * @param {Error} err - Erreur propagée via `next(err)`.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @param {import('express').NextFunction} next - Non utilisé, requis par la signature Express des middlewares d'erreur.
+ * @returns {void}
  */
 function errorHandler(err, req, res, next) {
   console.error(err);

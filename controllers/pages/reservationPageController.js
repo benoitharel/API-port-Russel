@@ -3,16 +3,32 @@ const Reservation = require('../../models/Reservation');
 
 // Duplique volontairement ../reservationController.js (dashboard HTML vs API JSON) — ne pas factoriser en service partagé.
 
+/**
+ * Normalise le paramètre `from` de navigation (list/show) vers une valeur connue.
+ * @param {string} value - Valeur brute reçue en query/body.
+ * @returns {'list'|'show'} La valeur normalisée.
+ */
 function normalizeFrom(value) {
   return value === 'list' ? 'list' : 'show';
 }
 
+/**
+ * Calcule l'URL vers laquelle rediriger le bouton Annuler d'un formulaire d'édition.
+ * @param {import('mongoose').Types.ObjectId} id - Identifiant de la réservation concernée.
+ * @param {'list'|'show'} from - Page d'origine de la navigation.
+ * @returns {string} L'URL de retour.
+ */
 function resolveCancelUrl(id, from) {
   return from === 'list' ? '/dashboard/reservations' : `/dashboard/reservations/${id}`;
 }
 
 /**
  * Recherche une réservation existante qui chevauche la période donnée sur un catway.
+ * @param {number} catwayNumber - Catway concerné.
+ * @param {Date} startDate - Début de la période à vérifier.
+ * @param {Date} endDate - Fin de la période à vérifier.
+ * @param {import('mongoose').Types.ObjectId} [excludeReservationId] - Réservation à exclure de la recherche (cas d'une mise à jour).
+ * @returns {Promise<import('mongoose').Document|null>} La réservation en conflit, ou null si aucune.
  */
 async function checkOverlap(catwayNumber, startDate, endDate, excludeReservationId) {
   return Reservation.findOne({
@@ -25,7 +41,8 @@ async function checkOverlap(catwayNumber, startDate, endDate, excludeReservation
 
 /**
  * Valide catwayNumber, clientName, boatName, startDate, endDate depuis le body.
- * Retourne { error: string } ou les champs parsés.
+ * @param {object} body - Corps de la requête.
+ * @returns {{error: string}|{catwayNumber: number, clientName: string, boatName: string, startDate: Date, endDate: Date}} L'erreur de validation, ou les champs parsés.
  */
 function parseReservationBody(body) {
   const { catwayNumber, clientName, boatName, startDate, endDate } = body;
@@ -56,11 +73,25 @@ function parseReservationBody(body) {
   return { catwayNumber: number, clientName, boatName, startDate: start, endDate: end };
 }
 
+/**
+ * GET /dashboard/reservations
+ * Affiche la liste des réservations.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
+ */
 async function list(req, res) {
   const reservations = await Reservation.find().sort({ startDate: 1 });
   res.render('reservations/list', { reservations });
 }
 
+/**
+ * GET /dashboard/reservations/:id
+ * Affiche le détail d'une réservation.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
+ */
 async function show(req, res) {
   const reservation = await Reservation.findById(req.params.id);
   if (!reservation) {
@@ -69,11 +100,25 @@ async function show(req, res) {
   res.render('reservations/show', { reservation });
 }
 
+/**
+ * GET /dashboard/reservations/new
+ * Affiche le formulaire de création d'une réservation.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
+ */
 async function newForm(req, res) {
   const catways = await Catway.find().sort({ catwayNumber: 1 });
   res.render('reservations/new', { catways, errors: [], values: {} });
 }
 
+/**
+ * POST /dashboard/reservations
+ * Traite la soumission du formulaire de création. Rejette (409) les chevauchements de dates.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
+ */
 async function create(req, res) {
   const parsed = parseReservationBody(req.body);
   if (parsed.error) {
@@ -107,6 +152,13 @@ async function create(req, res) {
   res.redirect('/dashboard/reservations');
 }
 
+/**
+ * GET /dashboard/reservations/:id/edit
+ * Affiche le formulaire d'édition d'une réservation.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
+ */
 async function editForm(req, res) {
   const reservation = await Reservation.findById(req.params.id);
   if (!reservation) {
@@ -123,6 +175,13 @@ async function editForm(req, res) {
   });
 }
 
+/**
+ * POST /dashboard/reservations/:id
+ * Traite la soumission du formulaire d'édition. Rejette (409) les chevauchements de dates.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
+ */
 async function update(req, res) {
   const reservation = await Reservation.findById(req.params.id);
   if (!reservation) {
@@ -176,6 +235,13 @@ async function update(req, res) {
   res.redirect(`/dashboard/reservations/${reservation._id}`);
 }
 
+/**
+ * POST /dashboard/reservations/:id/delete
+ * Supprime une réservation.
+ * @param {import('express').Request} req - Requête Express entrante.
+ * @param {import('express').Response} res - Réponse Express.
+ * @returns {Promise<void>}
+ */
 async function deleteReservation(req, res) {
   const reservation = await Reservation.findById(req.params.id);
   if (!reservation) {
