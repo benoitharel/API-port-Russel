@@ -20,6 +20,7 @@
     <form action="/dashboard/catways/<%= catway.catwayNumber %>" method="POST">
       <p>Numéro : <%= catway.catwayNumber %></p>
       <p>Type : <%= catway.catwayType %></p>
+      <input type="hidden" name="from" value="<%= from %>">
 
       <label for="catwayState">État</label>
       <input type="text" id="catwayState" name="catwayState" value="<%= catway.catwayState %>" required>
@@ -27,7 +28,7 @@
       <button type="submit">Enregistrer</button>
     </form>
 
-    <p class="page-links"><a href="/dashboard/catways/<%= catway.catwayNumber %>">Annuler</a></p>
+    <p class="page-links"><a href="<%= cancelUrl %>">Annuler</a></p>
   </main>
 
   <%- include('../partials/footer') %>

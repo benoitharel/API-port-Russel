@@ -13,7 +13,7 @@
     <p>État : <%= catway.catwayState %></p>
 
     <div class="resource-actions">
-      <a href="/dashboard/catways/<%= catway.catwayNumber %>/edit" class="btn btn-secondary">Modifier</a>
+      <a href="/dashboard/catways/<%= catway.catwayNumber %>/edit?from=show" class="btn btn-secondary">Modifier</a>
 
       <form action="/dashboard/catways/<%= catway.catwayNumber %>/delete" method="POST"
             onsubmit="return confirm('Supprimer ce catway ?');" class="inline-form">

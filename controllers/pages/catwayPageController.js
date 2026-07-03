@@ -1,6 +1,14 @@
 const Catway = require('../../models/Catway');
 const Reservation = require('../../models/Reservation');
 
+function normalizeFrom(value) {
+  return value === 'list' ? 'list' : 'show';
+}
+
+function resolveCancelUrl(catwayNumber, from) {
+  return from === 'list' ? '/dashboard/catways' : `/dashboard/catways/${catwayNumber}`;
+}
+
 async function list(req, res) {
   const catways = await Catway.find().sort({ catwayNumber: 1 });
   res.render('catways/list', { catways });
@@ -55,7 +63,8 @@ async function editForm(req, res) {
   if (!catway) {
     return res.status(404).render('error', { status: 404, message: 'Catway introuvable' });
   }
-  res.render('catways/edit', { catway, errors: [] });
+  const from = normalizeFrom(req.query.from);
+  res.render('catways/edit', { catway, errors: [], from, cancelUrl: resolveCancelUrl(catwayNumber, from) });
 }
 
 async function update(req, res) {
@@ -65,9 +74,15 @@ async function update(req, res) {
     return res.status(404).render('error', { status: 404, message: 'Catway introuvable' });
   }
 
-  const { catwayState } = req.body;
+  const { catwayState, from: bodyFrom } = req.body;
+  const from = normalizeFrom(bodyFrom);
   if (!catwayState || !catwayState.trim()) {
-    return res.status(400).render('catways/edit', { catway, errors: ['catwayState requis'] });
+    return res.status(400).render('catways/edit', {
+      catway,
+      errors: ['catwayState requis'],
+      from,
+      cancelUrl: resolveCancelUrl(catwayNumber, from),
+    });
   }
 
   catway.catwayState = catwayState;

@@ -31,7 +31,7 @@
             <td><%= c.catwayType %></td>
             <td><%= c.catwayState %></td>
             <td class="actions-cell">
-              <a href="/dashboard/catways/<%= c.catwayNumber %>/edit" class="btn btn-secondary btn-sm">Modifier</a>
+              <a href="/dashboard/catways/<%= c.catwayNumber %>/edit?from=list" class="btn btn-secondary btn-sm">Modifier</a>
               <form action="/dashboard/catways/<%= c.catwayNumber %>/delete" method="POST"
                     onsubmit="return confirm('Supprimer le catway <%= c.catwayNumber %> ?');" class="inline-form">
                 <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
