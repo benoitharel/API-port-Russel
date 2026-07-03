@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <%- include('../partials/head', { title: 'Réservation ' + reservation.clientName }) %>
+</head>
+<body>
+  <%- include('../partials/nav') %>
+
+  <main class="reservation-show">
+    <h1>Réservation de <%= reservation.clientName %></h1>
+
+    <p>Catway : <%= reservation.catwayNumber %></p>
+    <p>Bateau : <%= reservation.boatName %></p>
+    <p>Début : <%= reservation.startDate.toISOString().slice(0, 10) %></p>
+    <p>Fin : <%= reservation.endDate.toISOString().slice(0, 10) %></p>
+
+    <div class="resource-actions">
+      <a href="/dashboard/reservations/<%= reservation._id %>/edit?from=show" class="btn btn-secondary">Modifier</a>
+
+      <form action="/dashboard/reservations/<%= reservation._id %>/delete" method="POST"
+            onsubmit="return confirm('Supprimer cette réservation ?');" class="inline-form">
+        <button type="submit" class="btn btn-danger">Supprimer</button>
+      </form>
+    </div>
+
+    <p class="page-links">
+      <a href="/dashboard/reservations">&larr; Retour à la liste</a>
+      &middot;
+      <a href="/dashboard/reservations/new">Ajouter une réservation</a>
+    </p>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>
