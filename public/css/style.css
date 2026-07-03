@@ -118,6 +118,41 @@ button:hover {
   font-weight: 600;
 }
 
+.catways-list,
+.catway-new,
+.catway-edit,
+.catway-show {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.catway-new form,
+.catway-edit form,
+.catway-show {
+  background: #fff;
+  border: 1px solid #d9dfe5;
+  border-radius: 6px;
+  padding: 1.5rem;
+}
+
+.catways-list table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.catways-list th,
+.catways-list td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #d9dfe5;
+}
+
+.catways-list th {
+  background: #f5f7fa;
+  font-weight: 600;
+}
+
 footer {
   max-width: 640px;
   margin: 0 auto;

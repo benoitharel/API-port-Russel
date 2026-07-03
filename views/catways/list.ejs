@@ -21,6 +21,7 @@
           <th>Numéro</th>
           <th>Type</th>
           <th>État</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -29,6 +30,7 @@
             <td><a href="/dashboard/catways/<%= c.catwayNumber %>"><%= c.catwayNumber %></a></td>
             <td><%= c.catwayType %></td>
             <td><%= c.catwayState %></td>
+            <td><a href="/dashboard/catways/<%= c.catwayNumber %>/edit">Modifier</a></td>
           </tr>
         <% }) %>
       </tbody>
