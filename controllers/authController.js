@@ -2,6 +2,17 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 /**
+ * Répond selon le type de contenu négocié : callback html() ou json().
+ */
+function respondByType(req, res, { html, json }) {
+  const type = req.accepts(['html', 'json']);
+  if (type === 'html') {
+    return html();
+  }
+  return json();
+}
+
+/**
  * POST /login
  * Vérifie les credentials, pose un cookie `token` httpOnly et répond
  * JSON `{token, user}` (client JSON) ou redirige `/dashboard` (form HTML).
@@ -10,22 +21,20 @@ async function login(req, res, next) {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    const type = req.accepts(['html', 'json']);
-    if (type === 'html') {
-      return res.redirect('/?error=1');
-    }
-    return res.status(401).json({ message: 'Email ou mot de passe invalide' });
+    return respondByType(req, res, {
+      html: () => res.redirect('/?error=1'),
+      json: () => res.status(401).json({ message: 'Email ou mot de passe invalide' }),
+    });
   }
 
   const user = await User.findOne({ email }).select('+password');
   const valid = user && (await user.comparePassword(password));
 
   if (!valid) {
-    const type = req.accepts(['html', 'json']);
-    if (type === 'html') {
-      return res.redirect('/?error=1');
-    }
-    return res.status(401).json({ message: 'Email ou mot de passe invalide' });
+    return respondByType(req, res, {
+      html: () => res.redirect('/?error=1'),
+      json: () => res.status(401).json({ message: 'Email ou mot de passe invalide' }),
+    });
   }
 
   const payload = { id: user._id, username: user.username, email: user.email };
@@ -39,11 +48,10 @@ async function login(req, res, next) {
     secure: process.env.NODE_ENV === 'production',
   });
 
-  const type = req.accepts(['html', 'json']);
-  if (type === 'html') {
-    return res.redirect('/dashboard');
-  }
-  return res.status(200).json({ token, user: payload });
+  return respondByType(req, res, {
+    html: () => res.redirect('/dashboard'),
+    json: () => res.status(200).json({ token, user: payload }),
+  });
 }
 
 /**
@@ -52,11 +60,10 @@ async function login(req, res, next) {
  */
 function logout(req, res) {
   res.clearCookie('token');
-  const type = req.accepts(['html', 'json']);
-  if (type === 'html') {
-    return res.redirect('/');
-  }
-  return res.status(200).json({ message: 'Déconnexion réussie' });
+  return respondByType(req, res, {
+    html: () => res.redirect('/'),
+    json: () => res.status(200).json({ message: 'Déconnexion réussie' }),
+  });
 }
 
 module.exports = { login, logout };
