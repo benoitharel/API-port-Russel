@@ -1,5 +1,7 @@
 const User = require('../../models/User');
 
+// Duplique volontairement ../userController.js (dashboard HTML vs API JSON) — ne pas factoriser en service partagé.
+
 const EMAIL_RE = /^\S+@\S+\.\S+$/;
 
 async function list(req, res) {
