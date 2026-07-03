@@ -1,5 +1,7 @@
 const User = require('../models/User');
 
+// Duplique volontairement controllers/pages/userPageController.js (API JSON vs dashboard HTML) — ne pas factoriser en service partagé.
+
 /**
  * Recherche un utilisateur par email.
  */

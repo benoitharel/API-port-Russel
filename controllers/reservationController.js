@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const Reservation = require('../models/Reservation');
 const { parseCatwayNumber, findCatwayByNumber } = require('./helpers/catwayLookup');
 
+// Duplique volontairement controllers/pages/reservationPageController.js (API JSON vs dashboard HTML) — ne pas factoriser en service partagé.
+
 /**
  * Recherche une réservation existante qui chevauche la période donnée sur un catway.
  */

@@ -1,6 +1,8 @@
 const Catway = require('../../models/Catway');
 const Reservation = require('../../models/Reservation');
 
+// Duplique volontairement ../reservationController.js (dashboard HTML vs API JSON) — ne pas factoriser en service partagé.
+
 function normalizeFrom(value) {
   return value === 'list' ? 'list' : 'show';
 }

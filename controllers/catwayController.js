@@ -2,6 +2,8 @@ const Catway = require('../models/Catway');
 const Reservation = require('../models/Reservation');
 const { parseCatwayNumber, findCatwayByNumber } = require('./helpers/catwayLookup');
 
+// Duplique volontairement controllers/pages/catwayPageController.js (API JSON vs dashboard HTML) — ne pas factoriser en service partagé.
+
 /**
  * GET /catways
  */
