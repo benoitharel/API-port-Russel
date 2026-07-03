@@ -21,7 +21,7 @@
           <th>Numéro</th>
           <th>Type</th>
           <th>État</th>
-          <th></th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -30,7 +30,13 @@
             <td><a href="/dashboard/catways/<%= c.catwayNumber %>"><%= c.catwayNumber %></a></td>
             <td><%= c.catwayType %></td>
             <td><%= c.catwayState %></td>
-            <td><a href="/dashboard/catways/<%= c.catwayNumber %>/edit">Modifier</a></td>
+            <td class="actions-cell">
+              <a href="/dashboard/catways/<%= c.catwayNumber %>/edit" class="btn btn-secondary btn-sm">Modifier</a>
+              <form action="/dashboard/catways/<%= c.catwayNumber %>/delete" method="POST"
+                    onsubmit="return confirm('Supprimer le catway <%= c.catwayNumber %> ?');" class="inline-form">
+                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+              </form>
+            </td>
           </tr>
         <% }) %>
       </tbody>

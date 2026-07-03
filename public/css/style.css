@@ -55,6 +55,51 @@ button:hover {
   background: #155a86;
 }
 
+.btn {
+  display: inline-block;
+  margin: 0;
+  padding: 0.5rem 1.1rem;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn-secondary {
+  background: #fff;
+  border-color: #1d6fa5;
+  color: #1d6fa5;
+}
+
+.btn-secondary:hover {
+  background: #1d6fa5;
+  color: #fff;
+}
+
+.btn-danger {
+  background: #b00020;
+  color: #fff;
+}
+
+.btn-danger:hover {
+  background: #8c0019;
+}
+
+.btn-sm {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.85rem;
+}
+
+.inline-form {
+  display: inline-flex;
+  margin: 0;
+}
+
 .error {
   color: #b00020;
   font-weight: 600;
@@ -151,6 +196,36 @@ button:hover {
 .catways-list th {
   background: #f5f7fa;
   font-weight: 600;
+}
+
+.catways-list .actions-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.resource-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.5rem 0 1rem;
+}
+
+.page-links {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #d9dfe5;
+  color: #6b7280;
+}
+
+.page-links a {
+  color: #1d6fa5;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.page-links a:hover {
+  color: #155a86;
 }
 
 footer {

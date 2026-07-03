@@ -12,15 +12,17 @@
     <p>Type : <%= catway.catwayType %></p>
     <p>État : <%= catway.catwayState %></p>
 
-    <p><a href="/dashboard/catways/<%= catway.catwayNumber %>/edit">Modifier</a></p>
+    <div class="resource-actions">
+      <a href="/dashboard/catways/<%= catway.catwayNumber %>/edit" class="btn btn-secondary">Modifier</a>
 
-    <form action="/dashboard/catways/<%= catway.catwayNumber %>/delete" method="POST"
-          onsubmit="return confirm('Supprimer ce catway ?');">
-      <button type="submit">Supprimer</button>
-    </form>
+      <form action="/dashboard/catways/<%= catway.catwayNumber %>/delete" method="POST"
+            onsubmit="return confirm('Supprimer ce catway ?');" class="inline-form">
+        <button type="submit" class="btn btn-danger">Supprimer</button>
+      </form>
+    </div>
 
-    <p>
-      <a href="/dashboard/catways">Retour à la liste</a>
+    <p class="page-links">
+      <a href="/dashboard/catways">&larr; Retour à la liste</a>
       &middot;
       <a href="/dashboard/catways/new">Ajouter un catway</a>
     </p>
