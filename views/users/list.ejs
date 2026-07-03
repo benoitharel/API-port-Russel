@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <%- include('../partials/head', { title: 'Utilisateurs' }) %>
+</head>
+<body>
+  <%- include('../partials/nav') %>
+
+  <main class="users-list">
+    <h1>Utilisateurs</h1>
+
+    <p><a href="/dashboard/users/new">Ajouter un utilisateur</a></p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% users.forEach(u => { %>
+          <tr>
+            <td><a href="/dashboard/users/<%= encodeURIComponent(u.email) %>"><%= u.username %></a></td>
+            <td><%= u.email %></td>
+            <td class="actions-cell">
+              <a href="/dashboard/users/<%= encodeURIComponent(u.email) %>/edit" class="btn btn-secondary btn-sm">Modifier</a>
+              <form action="/dashboard/users/<%= encodeURIComponent(u.email) %>/delete" method="POST"
+                    onsubmit="return confirm('Supprimer l\'utilisateur <%= u.username %> ?');" class="inline-form">
+                <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>

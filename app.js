@@ -12,6 +12,7 @@ const homeRoutes = require('./routes/pages/homeRoutes');
 const dashboardRoutes = require('./routes/pages/dashboardRoutes');
 const catwayPageRoutes = require('./routes/pages/catwayPageRoutes');
 const reservationPageRoutes = require('./routes/pages/reservationPageRoutes');
+const userPageRoutes = require('./routes/pages/userPageRoutes');
 const { requireAuth } = require('./middlewares/auth');
 const { notFoundHandler, errorHandler } = require('./middlewares/errorHandler');
 
@@ -39,6 +40,7 @@ app.use('/users', requireAuth, userRoutes);
 app.use('/dashboard', requireAuth, dashboardRoutes);
 app.use('/dashboard/catways', requireAuth, catwayPageRoutes);
 app.use('/dashboard/reservations', requireAuth, reservationPageRoutes);
+app.use('/dashboard/users', requireAuth, userPageRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

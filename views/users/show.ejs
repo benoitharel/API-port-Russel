@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <%- include('../partials/head', { title: 'Utilisateur ' + user.username }) %>
+</head>
+<body>
+  <%- include('../partials/nav') %>
+
+  <main class="user-show">
+    <h1><%= user.username %></h1>
+
+    <p>Email : <%= user.email %></p>
+
+    <div class="resource-actions">
+      <a href="/dashboard/users/<%= encodeURIComponent(user.email) %>/edit" class="btn btn-secondary">Modifier</a>
+
+      <form action="/dashboard/users/<%= encodeURIComponent(user.email) %>/delete" method="POST"
+            onsubmit="return confirm('Supprimer cet utilisateur ?');" class="inline-form">
+        <button type="submit" class="btn btn-danger">Supprimer</button>
+      </form>
+    </div>
+
+    <p class="page-links">
+      <a href="/dashboard/users">&larr; Retour à la liste</a>
+      &middot;
+      <a href="/dashboard/users/new">Ajouter un utilisateur</a>
+    </p>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>
