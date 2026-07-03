@@ -10,6 +10,7 @@ const catwayRoutes = require('./routes/catwayRoutes');
 const userRoutes = require('./routes/userRoutes');
 const homeRoutes = require('./routes/pages/homeRoutes');
 const dashboardRoutes = require('./routes/pages/dashboardRoutes');
+const catwayPageRoutes = require('./routes/pages/catwayPageRoutes');
 const { requireAuth } = require('./middlewares/auth');
 const { notFoundHandler, errorHandler } = require('./middlewares/errorHandler');
 
@@ -35,6 +36,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/catways', requireAuth, catwayRoutes);
 app.use('/users', requireAuth, userRoutes);
 app.use('/dashboard', requireAuth, dashboardRoutes);
+app.use('/dashboard/catways', requireAuth, catwayPageRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
