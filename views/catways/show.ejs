@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <%- include('../partials/head', { title: 'Catway ' + catway.catwayNumber }) %>
+</head>
+<body>
+  <%- include('../partials/nav') %>
+
+  <main class="catway-show">
+    <h1>Catway <%= catway.catwayNumber %></h1>
+
+    <p>Type : <%= catway.catwayType %></p>
+    <p>État : <%= catway.catwayState %></p>
+
+    <p><a href="/dashboard/catways/<%= catway.catwayNumber %>/edit">Modifier</a></p>
+
+    <form action="/dashboard/catways/<%= catway.catwayNumber %>/delete" method="POST"
+          onsubmit="return confirm('Supprimer ce catway ?');">
+      <button type="submit">Supprimer</button>
+    </form>
+
+    <p><a href="/dashboard/catways">Retour à la liste</a></p>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>

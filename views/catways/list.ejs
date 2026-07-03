@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <%- include('../partials/head', { title: 'Catways' }) %>
+</head>
+<body>
+  <%- include('../partials/nav') %>
+
+  <main class="catways-list">
+    <h1>Catways</h1>
+
+    <% if (typeof error !== 'undefined' && error) { %>
+      <p class="error"><%= error %></p>
+    <% } %>
+
+    <p><a href="/dashboard/catways/new">Ajouter un catway</a></p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Numéro</th>
+          <th>Type</th>
+          <th>État</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% catways.forEach(c => { %>
+          <tr>
+            <td><a href="/dashboard/catways/<%= c.catwayNumber %>"><%= c.catwayNumber %></a></td>
+            <td><%= c.catwayType %></td>
+            <td><%= c.catwayState %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </main>
+
+  <%- include('../partials/footer') %>
+</body>
+</html>
